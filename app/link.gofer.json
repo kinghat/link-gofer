@@ -1,0 +1,8 @@
+{
+	"name": "link.gofer",
+	"description": "browser extension and small native application to open links using the systems default",
+	"path": "/home/kinghat/code/projects/extensions/link-gofer/builds/binaries/link-gofer-app-linux",
+	"type": "stdio",
+	"allowed_extensions": ["ping_pong@example.org"],
+	"allowed_origins": ["chrome-extension://nflmdejmehgpogjeephahpiiaajafdhm/"]
+}

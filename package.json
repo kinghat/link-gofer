@@ -1,0 +1,33 @@
+{
+	"name": "link-gofer",
+	"version": "1.0.0",
+	"description": "browser extension and small native application to open links using the systems default",
+	"private": true,
+	"workspaces": [
+		"extension",
+		"app"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kinghat/link-gofer.git"
+	},
+	"keywords": [
+		"link-gofer",
+		"link",
+		"gofer",
+		"link",
+		"opener",
+		"default",
+		"opener"
+	],
+	"author": "kinghat <kinghat@protonmail.com> (https://github.com/kinghat)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/kinghat/link-gofer/issues"
+	},
+	"homepage": "https://github.com/kinghat/link-gofer",
+	"scripts": {
+		"package-app": "rm -rf builds/binaries && pkg app/package.json --out-path builds/binaries",
+		"post-package-app": "cp node_modules/opn/xdg-open builds/binaries"
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"manifest_version": 2,
+	"name": "Link Gofer",
+	"version": "1.0.0",
+	"description": "browser extension and small native application to open links using the systems default",
+	"homepage_url": "https://github.com/kinghat/link-gofer",
+	"icons": {},
+
+	"permissions": ["nativeMessaging", "contextMenus"],
+	"background": {
+		"scripts": ["background.js"]
+	}
+}

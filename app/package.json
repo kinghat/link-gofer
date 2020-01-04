@@ -1,0 +1,36 @@
+{
+	"name": "link-gofer-app",
+	"version": "1.0.0",
+	"description": "browser extension and small native application to open links using the systems default",
+	"main": "index.js",
+	"repository": "https://github.com/kinghat/link-gofer",
+	"keywords": [
+		"link-gofer",
+		"link",
+		"gofer",
+		"link",
+		"opener",
+		"default"
+	],
+	"author": "kinghat <kinghat@protonmail.com> (https://github.com/kinghat)",
+	"license": "MIT",
+	"bin": "index.js",
+	"pkg": {
+		"targets": [
+			"node12-linux-x64",
+			"node12-macos-x64",
+			"node12-win-x64"
+		]
+	},
+	"dependencies": {
+		"open": "^7.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "13.1.1",
+		"eslint": "^6.8.0",
+		"nodemon": "^2.0.2",
+		"pkg": "^4.4.2",
+		"webpack": "^4.41.5",
+		"webpack-cli": "^3.3.10"
+	}
+}
