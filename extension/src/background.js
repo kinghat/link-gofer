@@ -38,5 +38,5 @@ chrome.contextMenus.create({
 chrome.contextMenus.onClicked.addListener((info, tab) => {
 	console.log(`INFO: `, info);
 	console.log(`Sending Message: ${info.linkUrl}`);
-	port.postMessage({link: info.linkUrl});
+	port.postMessage({ link: info.linkUrl });
 });

@@ -28,12 +28,12 @@ process.stdin.on("readable", () => {
 	}
 	input = Buffer.concat(input);
 
-	let msgLen = input.readUInt32LE(0);
-	let dataLen = msgLen + 4;
+	const msgLen = input.readUInt32LE(0);
+	const dataLen = msgLen + 4;
 
 	if (input.length >= dataLen) {
-		let content = input.slice(4, dataLen);
-		let json = JSON.parse(content.toString());
+		const content = input.slice(4, dataLen);
+		const json = JSON.parse(content.toString());
 		handleMessage(json);
 		writeMsg(JSON.stringify(json));
 	}
@@ -63,41 +63,15 @@ async function writeMsg(msg) {
 }
 
 function sendMessage(msg) {
-	let buffer = Buffer.from(JSON.stringify(msg));
+	const buffer = Buffer.from(JSON.stringify(msg));
 
-	let header = Buffer.alloc(4);
+	const header = Buffer.alloc(4);
 	header.writeUInt32LE(buffer.length, 0);
 
-	let data = Buffer.concat([header, buffer]);
+	const data = Buffer.concat([header, buffer]);
 	process.stdout.write(data);
 }
 
 process.on("uncaughtException", (err) => {
 	sendMessage({ error: err.toString() });
 });
-
-// (async () => {
-// Opens the image in the default image viewer and waits for the opened app to quit.
-//  await open('unicorn.png', {wait: true});
-//  console.log('The image viewer app quit');
-
-// Opens the URL in the default browser.
-
-// await opn('https://sindresorhus.com').catch(error => console.log(error));
-
-// Opens the URL in a specified browser.
-
-//  await open('https://sindresorhus.com', {app: 'firefox'});
-
-// Specify app arguments.
-
-// await opn('https://sindresorhus.com', {app: ['google-chrome', '--incognito']}).catch(error => console.log(error));
-
-//     let opnOpts = {};
-//     if (['win32', 'darwin'].includes(process.platform)) {
-//       opnOpts = {};
-//     } else {
-//       opnOpts = {app: 'xdg-open'};
-//     }
-//     return open(`https://sindresorhus.com`, opnOpts);
-// })();
