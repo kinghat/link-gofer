@@ -4,7 +4,9 @@
 const port = chrome.runtime.connectNative("link.gofer");
 
 port.onMessage.addListener((response) => {
-	console.log(`Message Received: ${response}`);
+	if (response.message) {
+		console.log(`Message Received: `, response.message);
+	}
 });
 
 // https://github.com/mozilla/webextension-polyfill/issues/74#issuecomment-406289372
@@ -36,5 +38,5 @@ chrome.contextMenus.create({
 chrome.contextMenus.onClicked.addListener((info, tab) => {
 	console.log(`INFO: `, info);
 	console.log(`Sending Message: ${info.linkUrl}`);
-	port.postMessage({ link: info.linkUrl });
+	port.postMessage({link: info.linkUrl});
 });
