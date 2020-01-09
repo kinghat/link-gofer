@@ -44,7 +44,7 @@ process.stdin.on("readable", () => {
 async function handleMessage(request) {
 	if (request.link) {
 		await openLink(request.link);
-		sendMessage({ message: `opened ${request.link}` });
+		sendMessage({ type: "success", message: `Successfully Opened ${request.link}` });
 	}
 }
 

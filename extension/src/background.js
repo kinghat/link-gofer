@@ -1,11 +1,19 @@
-// import browser from "webextension-polyfill";
+import browser from "webextension-polyfill";
 
 // const port = browser.runtime.connectNative("link.gofer");
-const port = chrome.runtime.connectNative("link.gofer");
+const port = browser.runtime.connectNative("link.gofer");
 
 port.onMessage.addListener((response) => {
-	if (response.message) {
+	if (response.type === "success") {
 		console.log(`Message Received: `, response.message);
+	}
+});
+
+browser.runtime.onMessage.addListener((request, sender) => {
+	if (request.type === "link") {
+		console.log(`Message Received: `, request.data);
+		const message = { link: request.data };
+		sendNativeMessage(message);
 	}
 });
 
@@ -29,14 +37,21 @@ port.onMessage.addListener((response) => {
 // 	console.log(`Connection Closed: ${browser.runtime.lastError}`);
 // });
 
-chrome.contextMenus.removeAll();
-chrome.contextMenus.create({
+browser.contextMenus.removeAll();
+browser.contextMenus.create({
 	id: "link-gofer",
 	title: "Link Gofer",
 	contexts: ["link"],
 });
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-	console.log(`INFO: `, info);
-	console.log(`Sending Message: ${info.linkUrl}`);
-	port.postMessage({ link: info.linkUrl });
+browser.contextMenus.onClicked.addListener((info, tab) => {
+	const message = { link: info.linkUrl };
+
+	console.log(`Link Clicked: ${message.link}`);
+
+	sendNativeMessage(message);
 });
+
+function sendNativeMessage(message) {
+	port.postMessage(message);
+	console.log(`Sent Message: ${message.link}`);
+}

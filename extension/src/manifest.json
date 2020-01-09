@@ -5,8 +5,15 @@
 	"description": "browser extension and small native application to open links using the systems default",
 	"homepage_url": "https://github.com/kinghat/link-gofer",
 	"icons": {},
-	"permissions": ["nativeMessaging", "contextMenus"],
+	"permissions": ["nativeMessaging", "contextMenus", "<all_urls>"],
 	"background": {
 		"scripts": ["background.js"]
-	}
+	},
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["content-script.js"],
+			"all_frames": true
+		}
+	]
 }
