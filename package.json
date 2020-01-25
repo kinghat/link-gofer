@@ -27,14 +27,19 @@
 	},
 	"homepage": "https://github.com/kinghat/link-gofer",
 	"scripts": {
+		"start-app": "yarn workspace link-gofer-app start",
+		"serve-extension": "yarn workspace link-gofer-extension serve",
+		"start-dev": "concurrently \"yarn serve-extension\" \"yarn start-app\"",
 		"package-app": "rm -rf builds/binaries && pkg app/package.json --out-path builds/binaries",
+		"package-app:dev": "rm -rf builds/binaries/dev && pkg app/package.json --out-path builds/binaries/dev",
 		"post-package-app": "cp node_modules/opn/xdg-open builds/binaries"
 	},
 	"devDependencies": {
+		"concurrently": "^5.0.2",
 		"eslint": "^6.8.0",
 		"eslint-config-prettier": "^6.9.0",
 		"eslint-config-standard": "^14.1.0",
-		"eslint-plugin-import": "^2.19.1",
+		"eslint-plugin-import": "^2.20.0",
 		"eslint-plugin-node": "^11.0.0",
 		"eslint-plugin-prettier": "^3.1.2",
 		"eslint-plugin-promise": "^4.2.1",

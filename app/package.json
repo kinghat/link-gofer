@@ -14,7 +14,12 @@
 	],
 	"author": "kinghat <kinghat@protonmail.com> (https://github.com/kinghat)",
 	"license": "MIT",
-	"bin": "index.js",
+	"bin": {
+		"link-gofer-app": "index.js"
+	},
+	"scripts": {
+		"start": "nodemon app/index.js"
+	},
 	"pkg": {
 		"targets": [
 			"node12-linux-x64",
@@ -23,10 +28,13 @@
 		]
 	},
 	"dependencies": {
+		"commander": "^4.1.0",
+		"inquirer": "^7.0.3",
 		"open": "^7.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "13.1.1",
+		"@types/node": "13.5.0",
+		"@types/webpack": "^4.41.3",
 		"eslint": "^6.8.0",
 		"nodemon": "^2.0.2",
 		"pkg": "^4.4.2",
