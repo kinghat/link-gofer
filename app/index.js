@@ -5,12 +5,11 @@ const { writeFile, appendFile } = require("fs").promises;
 const { spawn } = require("child_process");
 const open = require("open");
 const program = require("commander");
-const inquirer = require("inquirer");
 const pkg = require("./package.json");
-const { questions, menu } = require("./cli/menu/menu");
+const { menu } = require("./cli/menu/menu");
 
-// program.version(pkg.version);
-// program.parse(process.argv);
+program.version(pkg.version);
+program.parse(process.argv);
 
 console.log(`Welcome to Link Gofer`);
 menu();
