@@ -8,11 +8,13 @@ const program = require("commander");
 const pkg = require("./package.json");
 const { menu } = require("./cli/menu/menu");
 
-program.version(pkg.version);
-program.parse(process.argv);
+if (process.stdin.isTTY) {
+	program.version(pkg.version);
+	program.parse(process.argv);
 
-console.log(`Welcome to Link Gofer`);
-menu();
+	console.log(`Welcome to Link Gofer`);
+	menu();
+}
 
 if (!process.stdin.isTTY) {
 	process.stdin.on("readable", () => {
@@ -38,6 +40,29 @@ if (!process.stdin.isTTY) {
 		// writeMsg(input);
 	});
 }
+
+// process.stdin.on("readable", () => {
+// 	let input = [];
+// 	let chunk;
+// 	while ((chunk = process.stdin.read())) {
+// 		input.push(chunk);
+// 	}
+// 	// console.log(`LOG: chunk: `, chunk);
+// 	input = Buffer.concat(input);
+// 	// console.log(`LOG: input: `, input.toString());
+
+// 	const msgLen = input.readUInt32LE(0);
+// 	const dataLen = msgLen + 4;
+
+// 	if (input.length >= dataLen) {
+// 		const content = input.slice(4, dataLen);
+// 		const json = JSON.parse(content.toString());
+// 		handleMessage(json);
+// 		writeMsg(JSON.stringify(json));
+// 	}
+
+// 	// writeMsg(input);
+// });
 
 async function handleMessage(request) {
 	if (request.link) {
