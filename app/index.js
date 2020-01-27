@@ -14,28 +14,30 @@ program.parse(process.argv);
 console.log(`Welcome to Link Gofer`);
 menu();
 
-process.stdin.on("readable", () => {
-	let input = [];
-	let chunk;
-	while ((chunk = process.stdin.read())) {
-		input.push(chunk);
-	}
-	// console.log(`LOG: chunk: `, chunk);
-	input = Buffer.concat(input);
-	// console.log(`LOG: input: `, input.toString());
+if (!process.stdin.isTTY) {
+	process.stdin.on("readable", () => {
+		let input = [];
+		let chunk;
+		while ((chunk = process.stdin.read())) {
+			input.push(chunk);
+		}
+		// console.log(`LOG: chunk: `, chunk);
+		input = Buffer.concat(input);
+		// console.log(`LOG: input: `, input.toString());
 
-	const msgLen = input.readUInt32LE(0);
-	const dataLen = msgLen + 4;
+		const msgLen = input.readUInt32LE(0);
+		const dataLen = msgLen + 4;
 
-	if (input.length >= dataLen) {
-		const content = input.slice(4, dataLen);
-		const json = JSON.parse(content.toString());
-		handleMessage(json);
-		writeMsg(JSON.stringify(json));
-	}
+		if (input.length >= dataLen) {
+			const content = input.slice(4, dataLen);
+			const json = JSON.parse(content.toString());
+			handleMessage(json);
+			writeMsg(JSON.stringify(json));
+		}
 
-	// writeMsg(input);
-});
+		// writeMsg(input);
+	});
+}
 
 async function handleMessage(request) {
 	if (request.link) {
@@ -74,6 +76,7 @@ function sendMessage(msg) {
 }
 
 process.on("uncaughtException", (err) => {
+	console.log(`LOG: err: `, err);
 	sendMessage({ error: err.toString() });
 });
 
