@@ -29,7 +29,7 @@
 	},
 	"dependencies": {
 		"commander": "^4.1.0",
-		"inquirer": "^7.0.3",
+		"inquirer": "^7.0.4",
 		"open": "^7.0.0"
 	},
 	"devDependencies": {

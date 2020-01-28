@@ -4,5 +4,5 @@
 	"path": "/home/kinghat/code/projects/extensions/link-gofer/builds/binaries/link-gofer-app-linux",
 	"type": "stdio",
 	"allowed_extensions": ["ping_pong@example.org"],
-	"allowed_origins": ["chrome-extension://nflmdejmehgpogjeephahpiiaajafdhm/"]
+	"allowed_origins": ["chrome-extension://ffafcnflglpadgjpkagjihmpemgbpdin/"]
 }
