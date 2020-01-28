@@ -12,7 +12,9 @@ if (process.stdin.isTTY) {
 	program.version(pkg.version);
 	program.parse(process.argv);
 
-	menu();
+	console.log(`Welcome to Link Gofer:`);
+
+	menu().catch((error) => console.log(error));
 }
 
 if (!process.stdin.isTTY) {
