@@ -1,10 +1,12 @@
 const inquirer = require("inquirer");
 
-const { install } = require("./install");
+const { isInstalled } = require("../../installer/installer");
 const { uninstall } = require("./uninstall");
 const { printSystemReport } = require("./system-report");
 
-const mainMenu = ["Install", "Uninstall", "System Report", "Quit"];
+const staticMenu = ["System Report", "Quit"];
+const variableMenu = async () => [(await isInstalled()) ? "Uninstall" : "Install", "TEST_ENTRY"];
+const mainMenu = async () => [...(await variableMenu()), ...staticMenu];
 const questions = [
 	{
 		type: "list",
@@ -15,30 +17,13 @@ const questions = [
 	},
 ];
 
-// inquirer
-// 	.prompt(questions)
-// 	.then((answers) => console.log(JSON.stringify(answers)))
-// 	.catch((error) => console.log(error));
-
 const menu = async () => {
-	// const selection = await install();
-	// const selection = await uninstall();
-	// console.log(selection);
-	// if (selection.uninstall === "System Report") printSystemReport();
 	const { main } = await inquirer.prompt(questions);
-	// console.log(`LOG: menu -> selection: `, main);
-	if (main === "System Report") {
-		await printSystemReport();
-		// return menu();
-	}
+
+	if (main === "System Report") await printSystemReport();
 	return main !== "Quit" ? menu() : main;
 };
 
 module.exports = {
-	questions,
-	// isInstalled: async () => {
-	// 	const selection = await install();
-	// 	console.log(selection);
-	// },
 	menu,
 };

@@ -1,8 +1,13 @@
 const inquirer = require("inquirer");
 
 const { MANIFEST_LOCATIONS } = require("../../installer/app-variables");
-const { isInstalled } = require("../../installer/installer");
 const { menu } = require("./menu");
+const {
+	isManifestFile,
+	staticManifestPathLookup,
+	isInstalled,
+	getApplicationEnvironment,
+} = require("../../installer/installer");
 
 const systemReportMenu = () => {
 	const questions = [
@@ -20,10 +25,12 @@ const systemReportMenu = () => {
 const printSystemReport = async () => {
 	console.log(`System Report:
 	platform: ${process.platform}
-	installed: ${await isInstalled(MANIFEST_LOCATIONS.linux.user.chrome[0])}
+	installed: ${await isInstalled()}
+	manifest location: ${
+		(await isInstalled()) ? staticManifestPathLookup(MANIFEST_LOCATIONS) : "Not Found"
+	}
+	application environment: ${await getApplicationEnvironment(MANIFEST_LOCATIONS)}
 	`);
-
-	menu();
 };
 
 module.exports = {
