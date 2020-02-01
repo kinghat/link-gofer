@@ -1,11 +1,12 @@
 const inquirer = require("inquirer");
 
-const { isInstalled } = require("../../installer/installer");
+const { APP } = require("../../installer/app-variables");
+const { install } = require("../../installer/installer");
 const { uninstall } = require("./uninstall");
 const { printSystemReport } = require("./system-report");
 
 const staticMenu = ["System Report", "Quit"];
-const variableMenu = async () => [(await isInstalled()) ? "Uninstall" : "Install", "TEST_ENTRY"];
+const variableMenu = async () => [(await APP.STATE()) ? "Uninstall" : "Install", "TEST_ENTRY"];
 const mainMenu = async () => [...(await variableMenu()), ...staticMenu];
 const questions = [
 	{
@@ -21,6 +22,8 @@ const menu = async () => {
 	const { main } = await inquirer.prompt(questions);
 
 	if (main === "System Report") await printSystemReport();
+	if (main === "Install") install();
+	if (main === "Uninstall") uninstall();
 	return main !== "Quit" ? menu() : main;
 };
 
