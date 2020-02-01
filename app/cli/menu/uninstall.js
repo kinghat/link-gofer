@@ -1,4 +1,4 @@
-const inquirer = require("inquirer");
+// const inquirer = require("inquirer");
 
 const uninstall = () => {
 	console.log("Uninstalled");

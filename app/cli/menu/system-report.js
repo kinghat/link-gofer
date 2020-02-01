@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 
-const { APP } = require("../../installer/app-variables");
+const { APP } = require("../../lib/app-variables");
 // const { isInstalled } = require("../../lib/utilities");
 
 const systemReportMenu = () => {

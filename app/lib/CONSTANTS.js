@@ -1,5 +1,4 @@
 const { homedir } = require("os");
-const { getManifestPath, getManifestScope, isInstalled } = require("../lib/utilities");
 
 const NAME = "link.gofer.json";
 const MANIFEST_PATHS = {
@@ -44,26 +43,9 @@ const WINDOWS_REGISTRY_KEYS = {
 		firefox: `HKEY_CURRENT_USER\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\${NAME}`,
 	},
 };
-const PLATFORM = process.platform;
-const MANIFEST_SCOPE = async () => getManifestScope(MANIFEST_PATHS, PLATFORM);
-const MANIFEST_PATH = async () =>
-	getManifestPath(APP.MANIFEST_PATHS, APP.PLATFORM, APP.MANIFEST_SCOPE);
-const STATE = async () => isInstalled(MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE);
-const APP = {
-	NAME,
-	STATE,
-	PLATFORM,
-	MANIFEST_PATH,
-	MANIFEST_SCOPE,
-	MANIFEST_PATHS,
-	WINDOWS_REGISTRY_KEYS,
-};
 
 module.exports = {
-	APP,
 	NAME,
-	PLATFORM,
-	MANIFEST_SCOPE,
 	MANIFEST_PATHS,
 	WINDOWS_REGISTRY_KEYS,
 };
