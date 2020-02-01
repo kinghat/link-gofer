@@ -1,13 +1,12 @@
 const inquirer = require("inquirer");
 
-const { MANIFEST_LOCATIONS } = require("../../installer/app-variables");
-const { menu } = require("./menu");
 const {
-	isManifestFile,
-	staticManifestPathLookup,
-	isInstalled,
-	getApplicationEnvironment,
-} = require("../../installer/installer");
+	MANIFEST_LOCATIONS,
+	PLATFORM,
+	MANIFEST_SCOPE,
+	getManifestPath,
+} = require("../../installer/app-variables");
+const { isInstalled } = require("../../installer/installer");
 
 const systemReportMenu = () => {
 	const questions = [
@@ -26,10 +25,12 @@ const printSystemReport = async () => {
 	console.log(`System Report:
 	platform: ${process.platform}
 	installed: ${await isInstalled()}
-	manifest location: ${
-		(await isInstalled()) ? staticManifestPathLookup(MANIFEST_LOCATIONS) : "Not Found"
+	manifest path: ${
+		(await isInstalled())
+			? await getManifestPath(MANIFEST_LOCATIONS, PLATFORM, MANIFEST_SCOPE)
+			: "Not Found"
 	}
-	application environment: ${await getApplicationEnvironment(MANIFEST_LOCATIONS)}
+	manifest scope: ${await MANIFEST_SCOPE()}
 	`);
 };
 
