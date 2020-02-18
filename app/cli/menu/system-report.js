@@ -1,20 +1,7 @@
-const inquirer = require("inquirer");
+// const inquirer = require("inquirer");
 
 const { APP } = require("../../lib/app-variables");
 // const { isInstalled } = require("../../lib/utilities");
-
-const systemReportMenu = () => {
-	const questions = [
-		{
-			type: "list",
-			name: "info",
-			message: "Link Gofer is NOT installed. Would you like to install it?",
-			choices: ["Install", "System Report", "Quit"],
-			default: "Install",
-		},
-	];
-	return inquirer.prompt(questions);
-};
 
 const printSystemReport = async () => {
 	const state = await APP.STATE();
@@ -28,6 +15,19 @@ const printSystemReport = async () => {
 };
 
 module.exports = {
-	systemReportMenu,
+	// systemReportMenu,
 	printSystemReport,
 };
+
+// const systemReportMenu = () => {
+// 	const questions = [
+// 		{
+// 			type: "list",
+// 			name: "info",
+// 			message: "Link Gofer is NOT installed. Would you like to install it?",
+// 			choices: ["Install", "System Report", "Quit"],
+// 			default: "Install",
+// 		},
+// 	];
+// 	return inquirer.prompt(questions);
+// };

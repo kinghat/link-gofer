@@ -2,7 +2,6 @@
 // #!/usr/bin/env node
 
 const { writeFile, appendFile } = require("fs").promises;
-// const { spawn } = require("child_process");
 const open = require("open");
 const program = require("commander");
 const pkg = require("./package.json");

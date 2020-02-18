@@ -7,6 +7,14 @@ const getManifestPath = async (MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE, browser
 	return scope ? MANIFEST_PATHS[PLATFORM][scope][browser] : scope;
 };
 
+const getManifestScope = async (MANIFEST_PATHS, PLATFORM, browser = "chrome") => {
+	for (const key in MANIFEST_PATHS[PLATFORM]) {
+		if (await isManifestFile(MANIFEST_PATHS[PLATFORM][key][browser])) return key;
+	}
+};
+
+async function getBrowsers(MANIFEST_PATHS, PLATFORM) {}
+
 const isManifestFile = async (MANIFEST_PATH) => {
 	// if (!STATIC_MANIFEST_PATH) return false;
 	const status = await stat(MANIFEST_PATH).catch((error) => {
@@ -18,12 +26,6 @@ const isManifestFile = async (MANIFEST_PATH) => {
 	if (!status || !status.isFile()) return false;
 
 	return status.isFile();
-};
-
-const getManifestScope = async (MANIFEST_PATHS, PLATFORM, browser = "chrome") => {
-	for (const key in MANIFEST_PATHS[PLATFORM]) {
-		if (await isManifestFile(MANIFEST_PATHS[PLATFORM][key][browser])) return key;
-	}
 };
 
 const isGlobalScope = async (MANIFEST_SCOPE) => {

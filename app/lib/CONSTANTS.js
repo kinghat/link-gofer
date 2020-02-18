@@ -1,6 +1,9 @@
 const { homedir } = require("os");
 
-const NAME = "link.gofer.json";
+const pkg = require("../package.json");
+
+const NAME = pkg.name.replace(/-/g, ".");
+const DESCRIPTION = pkg.description;
 const MANIFEST_PATHS = {
 	darwin: {
 		global: {
@@ -44,8 +47,16 @@ const WINDOWS_REGISTRY_KEYS = {
 	},
 };
 
+const MANIFEST_OBJECT = {
+	name: NAME,
+	description: DESCRIPTION,
+	path: "this/is/a/dummy/path",
+	type: "stdio",
+};
+
 module.exports = {
 	NAME,
 	MANIFEST_PATHS,
 	WINDOWS_REGISTRY_KEYS,
+	MANIFEST_OBJECT,
 };
