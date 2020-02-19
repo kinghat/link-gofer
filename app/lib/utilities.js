@@ -43,6 +43,7 @@ const isInstalled = async (MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE) => {
 module.exports = {
 	getManifestPath,
 	getManifestScope,
+	getBrowsers,
 	isManifestFile,
 	isGlobalScope,
 	isInstalled,

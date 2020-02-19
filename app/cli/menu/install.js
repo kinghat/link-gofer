@@ -1,7 +1,9 @@
 const inquirer = require("inquirer");
-// export const install = () => {
-// 	console.log(`INSTALLED!`);
-// };
+
+const { BROWSERS } = require("../../lib/app-variables");
+
+const staticMenu = ["Main Menu", "Quit"];
+const dynamicMenu = [...BROWSERS];
 
 module.exports = {
 	install: () => {

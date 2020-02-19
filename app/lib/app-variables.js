@@ -1,8 +1,9 @@
 const { NAME, MANIFEST_PATHS, WINDOWS_REGISTRY_KEYS, MANIFEST_OBJECT } = require("./CONSTANTS");
-const { getManifestPath, getManifestScope, isInstalled } = require("./utilities");
+const { getManifestPath, getManifestScope, getBrowsers, isInstalled } = require("./utilities");
 
 const STATE = async () => isInstalled(MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE);
 const PLATFORM = process.platform;
+const BROWSERS = getBrowsers;
 const MANIFEST_SCOPE = async () => getManifestScope(MANIFEST_PATHS, PLATFORM);
 const MANIFEST_PATH = async () =>
 	getManifestPath(APP.MANIFEST_PATHS, APP.PLATFORM, APP.MANIFEST_SCOPE);
@@ -14,6 +15,7 @@ const APP = {
 	NAME,
 	STATE,
 	PLATFORM,
+	BROWSERS,
 	MANIFEST_PATH,
 	MANIFEST_SCOPE,
 	MANIFEST_PATHS,
