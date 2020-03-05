@@ -3,6 +3,8 @@
 
 const { writeFile, appendFile } = require("fs").promises;
 const open = require("open");
+
+const { APP } = require("./lib/app-variables");
 const program = require("commander");
 const pkg = require("./package.json");
 const { menu } = require("./cli/menu/menu");
@@ -75,12 +77,17 @@ async function handleMessage(request) {
 }
 
 async function openLink(link) {
-	let options = {};
-	if (["win32", "darwin"].includes(process.platform)) {
-		options = {};
-	} else {
-		options = { app: "xdg-open" };
-	}
+	const options = {};
+
+	if (APP.PLATFORM === "linux") options.app = "xdg-open";
+
+	// APP.PLATFORM === "linux" ? (options.app = "xdg-open") : (options = {});
+
+	// if (["win32", "darwin"].includes(APP.PLATFORM)) {
+	// 	options = {};
+	// } else {
+	// 	options = { app: "xdg-open" };
+	// }
 	await open(link, options);
 }
 

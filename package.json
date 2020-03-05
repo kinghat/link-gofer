@@ -35,11 +35,11 @@
 		"post-package-app": "cp node_modules/opn/xdg-open builds/binaries"
 	},
 	"devDependencies": {
-		"concurrently": "^5.0.2",
+		"concurrently": "^5.1.0",
 		"eslint": "^6.8.0",
-		"eslint-config-prettier": "^6.9.0",
+		"eslint-config-prettier": "^6.10.0",
 		"eslint-config-standard": "^14.1.0",
-		"eslint-plugin-import": "^2.20.0",
+		"eslint-plugin-import": "^2.20.1",
 		"eslint-plugin-node": "^11.0.0",
 		"eslint-plugin-prettier": "^3.1.2",
 		"eslint-plugin-promise": "^4.2.1",

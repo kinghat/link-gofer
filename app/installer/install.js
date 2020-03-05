@@ -1,5 +1,4 @@
 const { writeFile } = require("fs").promises;
-// const { spawn } = require("child_process");
 
 const { APP } = require("../lib/app-variables");
 

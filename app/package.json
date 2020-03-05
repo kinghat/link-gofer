@@ -28,17 +28,18 @@
 		]
 	},
 	"dependencies": {
-		"commander": "^4.1.0",
+		"commander": "^4.1.1",
 		"inquirer": "^7.0.4",
-		"open": "^7.0.0"
+		"open": "^7.0.2",
+		"winreg-utf8": "^0.1.1"
 	},
 	"devDependencies": {
-		"@types/node": "13.5.0",
-		"@types/webpack": "^4.41.3",
+		"@types/node": "13.7.5",
+		"@types/webpack": "^4.41.6",
 		"eslint": "^6.8.0",
 		"nodemon": "^2.0.2",
-		"pkg": "^4.4.2",
-		"webpack": "^4.41.5",
-		"webpack-cli": "^3.3.10"
+		"pkg": "^4.4.3",
+		"webpack": "^4.41.6",
+		"webpack-cli": "^3.3.11"
 	}
 }
