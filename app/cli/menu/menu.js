@@ -1,33 +1,41 @@
 const inquirer = require("inquirer");
 
-const { APP } = require("../../lib/app-variables");
+const { STATE } = require("../../lib/app-variables").APP;
 const { installMenu } = require("./install");
 const { uninstall } = require("./uninstall");
 const { printSystemReport } = require("./system-report");
 
 const baseMenu = ["System Report", "Quit"];
-const dynamicMenu = async () => [(await APP.STATE()) ? "Uninstall" : "Install", "TEST_ENTRY"];
-const mainMenu = async () => [...(await dynamicMenu()), ...baseMenu];
-const questions = [
-	{
-		type: "list",
-		name: "main",
-		message: "Choose your action",
-		choices: mainMenu,
-		default: "System Report",
-	},
-];
+async function scaffoldMenu() {
+	const state = await STATE();
+	const dynamicMenu = [state ? "Uninstall" : "Install"];
+	const mainMenu = [...dynamicMenu, ...baseMenu];
+	const message = state
+		? "Link Gofer already installed. Would you like to uninstall it?"
+		: "Link Gofer is NOT installed. Would you like to install it?";
+	const questions = [
+		{
+			type: "list",
+			name: "main",
+			message,
+			choices: mainMenu,
+			default: "System Report",
+		},
+	];
+	return questions;
+}
 
-const menu = async () => {
-	const { main } = await inquirer.prompt(questions);
+async function menu() {
+	const { main } = await inquirer.prompt(await scaffoldMenu());
+	console.log(`LOG: menu -> main`, main);
 
-	if (main === "System Report") await printSystemReport();
-	if (main === "Install") installMenu();
+	if (main === "System Report") return printSystemReport();
+	if (main === "Install") return installMenu();
 	if (main === "Uninstall") uninstall();
 	// if (main === "Quit") return main;
 	// return main !== "Quit" ? menu() : main;
-	// return main !== "Quit" ? menu() : main;
-};
+	return main !== "Quit" ? menu() : main;
+}
 
 module.exports = {
 	baseMenu,

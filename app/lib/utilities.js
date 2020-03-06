@@ -17,9 +17,9 @@ const getManifestScope = async (MANIFEST_PATHS, PLATFORM, browser = "chrome") =>
 	}
 };
 
-async function getBrowsers(PLATFORM, BROWSERS) {
+async function getBrowsers(PLATFORM, BROWSERS_DATA) {
 	if (PLATFORM === "win32") {
-		const browsers = BROWSERS.flatMap((browser) =>
+		const browsers = BROWSERS_DATA.flatMap((browser) =>
 			browser.win32.aliases.map((name) =>
 				browser.browser === "firefox"
 					? {
@@ -36,34 +36,21 @@ async function getBrowsers(PLATFORM, BROWSERS) {
 		);
 		return winBrowsers(browsers);
 	} else if (PLATFORM === "linux") {
-		const browsers = BROWSERS.flatMap((browser) =>
-			browser.linux.aliases.filter(async (name) => {
-				const { stdout } = await exec(`command -v ${name}`).catch((error) => {
-					if (error.code === 127) return {};
-					throw error;
-				});
-				console.log({ stdout, name });
-				if (stdout) return name;
-				// return stdout ? name : stdout;
-			}),
-		);
-		// console.log(browsers);
-		return browsers;
+		return (
+			await Promise.all(
+				BROWSERS_DATA.flatMap((browser) => browser.linux.aliases).map(async (browser) => {
+					const { stdout } = await exec(`command -v ${browser}`).catch((error) => {
+						if (error.code === 127) return {};
+
+						throw error;
+					});
+
+					if (stdout) return browser;
+				}),
+			)
+		).filter(Boolean);
 	}
 }
-
-// async function test() {
-// 	const util = require("util");
-// const exec = util.promisify(require("child_process").exec);
-// const { stdout } = await exec(`command -v google-chrome-stables`).catch((error) => {
-// 	if (error.code === 127) return {};
-// 	throw error;
-// });
-// console.log("stdout: ", stdout);
-// }
-// test();
-
-// async function nixBrowsers(params) {}
 
 async function winBrowsers(browserArray) {
 	const installedBrowsers = [];
