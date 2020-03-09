@@ -3,7 +3,7 @@ const inquirer = require("inquirer");
 const { STATE } = require("../../lib/app-variables").APP;
 const { installMenu } = require("./install");
 const { uninstall } = require("./uninstall");
-const { printSystemReport } = require("./system-report");
+const { systemReportMenu } = require("./system-report");
 
 const baseMenu = ["System Report", "Quit"];
 async function scaffoldMenu() {
@@ -27,9 +27,9 @@ async function scaffoldMenu() {
 
 async function menu() {
 	const { main } = await inquirer.prompt(await scaffoldMenu());
-	console.log(`LOG: menu -> main`, main);
+	// console.log(`LOG: menu -> main`, main);
 
-	if (main === "System Report") return printSystemReport();
+	if (main === "System Report") return systemReportMenu();
 	if (main === "Install") return installMenu();
 	if (main === "Uninstall") uninstall();
 	// if (main === "Quit") return main;

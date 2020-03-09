@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 
-const { printSystemReport } = require("./system-report");
+const { systemReportMenu } = require("./system-report");
 const { BROWSERS, NAME } = require("../../lib/app-variables").APP;
 const { baseMenu, menu } = require("./menu");
 
@@ -29,7 +29,7 @@ async function installMenu() {
 	const { install } = await inquirer.prompt(await scaffoldMenu());
 
 	if (install === "Main Menu") return menu();
-	if (install === "System Report") printSystemReport();
+	if (install === "System Report") systemReportMenu();
 }
 
 module.exports = {
