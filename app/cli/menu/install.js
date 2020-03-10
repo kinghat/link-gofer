@@ -2,13 +2,13 @@ const inquirer = require("inquirer");
 
 const { systemReportMenu } = require("./system-report");
 const { BROWSERS, NAME } = require("../../lib/app-variables").APP;
-const { baseMenu, menu } = require("./menu");
+const { baseChoices, mainMenu } = require("./main-menu");
 
 async function scaffoldMenu() {
 	const browsers = await BROWSERS();
-	const staticMenu = ["Main Menu", "System Report", "Quit"];
-	const dynamicMenu = [...browsers];
-	const mainMenu = [...dynamicMenu, ...staticMenu];
+	const staticChoices = ["Main Menu", "System Report", "Quit"];
+	const dynamicChoices = [...browsers];
+	const choices = [...dynamicChoices, ...staticChoices];
 
 	const message = browsers.length
 		? `Which browser is the extension installed on?`
@@ -18,7 +18,7 @@ async function scaffoldMenu() {
 			type: "list",
 			name: "install",
 			message,
-			choices: mainMenu,
+			choices,
 			default: "Install",
 		},
 	];
@@ -28,7 +28,7 @@ async function scaffoldMenu() {
 async function installMenu() {
 	const { install } = await inquirer.prompt(await scaffoldMenu());
 
-	if (install === "Main Menu") return menu();
+	if (install === "Main Menu") return mainMenu();
 	if (install === "System Report") systemReportMenu();
 }
 

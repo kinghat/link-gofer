@@ -1,13 +1,13 @@
 const inquirer = require("inquirer");
 
 const { STATE, PLATFORM, MANIFEST_PATH, MANIFEST_SCOPE } = require("../../lib/app-variables").APP;
-const { menu } = require("./menu");
+const { menu } = require("./main-menu");
 
 // const { isInstalled } = require("../../lib/utilities");
 
-const baseMenu = ["Main Menu", "Quit"];
+const baseChoices = ["Main Menu", "Quit"];
 async function scaffoldMenu() {
-	const choices = [...baseMenu];
+	const choices = [...baseChoices];
 	const message = "System Report";
 	// const message = await printSystemReport();
 	const questions = [
