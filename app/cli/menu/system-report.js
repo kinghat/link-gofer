@@ -1,12 +1,7 @@
-const inquirer = require("inquirer");
-
 const { STATE, PLATFORM, MANIFEST_PATH, MANIFEST_SCOPE } = require("../../lib/app-variables").APP;
-const { menu } = require("./main-menu");
-
-// const { isInstalled } = require("../../lib/utilities");
 
 const baseChoices = ["Main Menu", "Quit"];
-async function scaffoldMenu() {
+async function scaffoldSystemReportMenuQuestions() {
 	const choices = [...baseChoices];
 	const message = "System Report";
 	// const message = await printSystemReport();
@@ -31,12 +26,7 @@ async function printSystemReport() {
 	`);
 }
 
-async function systemReportMenu() {
-	await printSystemReport();
-	const { report } = await inquirer.prompt(await scaffoldMenu());
-	if (report === "Main Menu") return menu();
-}
-
 module.exports = {
-	systemReportMenu,
+	scaffoldSystemReportMenuQuestions,
+	printSystemReport,
 };

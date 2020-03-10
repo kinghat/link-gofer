@@ -7,7 +7,8 @@ const open = require("open");
 const { APP } = require("./lib/app-variables");
 const program = require("commander");
 const pkg = require("./package.json");
-const { mainMenu } = require("./cli/menu/main-menu");
+// const { mainMenu } = require("./cli/menu/main-menu");
+const { rootMenu } = require("./cli/menu/root");
 
 if (process.stdin.isTTY) {
 	program.version(pkg.version);
@@ -15,7 +16,8 @@ if (process.stdin.isTTY) {
 
 	console.log(`Welcome to Link Gofer:`);
 
-	mainMenu().catch((error) => console.log(error));
+	rootMenu();
+	// rootMenu().catch((error) => console.log(error));
 }
 
 if (!process.stdin.isTTY) {
