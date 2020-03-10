@@ -6,7 +6,8 @@ const { baseChoices, mainMenu } = require("./main-menu");
 
 async function scaffoldMenu() {
 	const browsers = await BROWSERS();
-	const staticChoices = ["Main Menu", "System Report", "Quit"];
+	const staticChoices = ["Main Menu", ...baseChoices];
+	// const staticChoices = ["Main Menu", "System Report", "Quit"];
 	const dynamicChoices = [...browsers];
 	const choices = [...dynamicChoices, ...staticChoices];
 

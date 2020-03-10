@@ -1,4 +1,4 @@
-#!/home/kinghat/.nvm/versions/node/v13.6.0/bin/node
+// #!/home/kinghat/.nvm/versions/node/v13.6.0/bin/node
 // #!/usr/bin/env node
 
 const { writeFile, appendFile } = require("fs").promises;
@@ -7,7 +7,7 @@ const open = require("open");
 const { APP } = require("./lib/app-variables");
 const program = require("commander");
 const pkg = require("./package.json");
-const { menu } = require("./cli/menu/menu");
+const { mainMenu } = require("./cli/menu/main-menu");
 
 if (process.stdin.isTTY) {
 	program.version(pkg.version);
@@ -15,7 +15,7 @@ if (process.stdin.isTTY) {
 
 	console.log(`Welcome to Link Gofer:`);
 
-	menu().catch((error) => console.log(error));
+	mainMenu().catch((error) => console.log(error));
 }
 
 if (!process.stdin.isTTY) {
