@@ -1,7 +1,6 @@
 const { STATE, PLATFORM, MANIFEST_PATH, MANIFEST_SCOPE } = require("../../lib/app-variables").APP;
 
-const baseChoices = ["Main Menu", "Quit"];
-async function scaffoldSystemReportMenuQuestions() {
+async function scaffoldSystemReportMenuQuestions(baseChoices) {
 	const choices = [...baseChoices];
 	const message = "System Report";
 	// const message = await printSystemReport();

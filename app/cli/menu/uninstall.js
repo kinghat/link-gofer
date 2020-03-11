@@ -1,10 +1,8 @@
 const { BROWSERS } = require("../../lib/app-variables").APP;
-const { baseChoices } = require("./root");
 
-async function scaffoldUninstallMenuQuestions() {
+async function scaffoldUninstallMenuQuestions(baseChoices) {
 	const browsers = await BROWSERS();
-	const staticChoices = ["Main Menu", ...baseChoices];
-	// const staticChoices = ["Main Menu", "System Report", "Quit"];
+	const staticChoices = [...baseChoices];
 	const dynamicChoices = [...browsers];
 	const choices = [...dynamicChoices, ...staticChoices];
 
@@ -14,10 +12,10 @@ async function scaffoldUninstallMenuQuestions() {
 	const questions = [
 		{
 			type: "list",
-			name: "install",
+			name: "uninstall",
 			message,
 			choices,
-			default: "Install",
+			default: "Uninstall",
 		},
 	];
 	return questions;

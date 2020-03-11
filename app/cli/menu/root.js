@@ -3,43 +3,51 @@ const inquirer = require("inquirer");
 const { scaffoldMainMenuQuestions } = require("./main");
 const { scaffoldInstallMenuQuestions } = require("./install");
 const { scaffoldUninstallMenuQuestions } = require("./uninstall");
-const { scaffoldSystemReportMenuQuestions, printSystemReport } = require("./system-report");
+const { scaffoldSystemReportMenuQuestions, printSystemReport } = require("./report");
 
-const baseChoices = ["System Report", "Quit"];
+const baseChoices = ["System Report", "Main Menu", "Quit"];
+const menus = ["Install", "Uninstall", "System Report", "Main Menu", "Quit"];
+
 async function rootMenu() {
 	mainMenu();
 }
 
 async function systemReportMenu() {
 	await printSystemReport();
-	const { report } = await inquirer.prompt(await scaffoldSystemReportMenuQuestions());
-	if (report === "Main Menu") return mainMenu();
+	const questions = await scaffoldSystemReportMenuQuestions(baseChoices);
+	console.log(`LOG: systemReportMenu -> questions: `, questions);
+	const choice = await inquirer.prompt(questions);
+	// const choice = await inquirer.prompt(await scaffoldSystemReportMenuQuestions(baseChoices));
+
+	menuChoiceHandler(choice);
 }
 
 async function installMenu() {
-	const { install } = await inquirer.prompt(await scaffoldInstallMenuQuestions(baseChoices));
+	const choice = await inquirer.prompt(await scaffoldInstallMenuQuestions(baseChoices));
 
-	if (install === "Main Menu") return rootMenu();
-	if (install === "System Report") systemReportMenu();
+	menuChoiceHandler(choice);
 }
 
 async function uninstallMenu() {
-	const { install } = await inquirer.prompt(await scaffoldUninstallMenuQuestions());
+	const choice = await inquirer.prompt(await scaffoldUninstallMenuQuestions(baseChoices));
 
-	if (install === "Main Menu") return rootMenu();
-	if (install === "System Report") systemReportMenu();
+	menuChoiceHandler(choice);
 }
 
 async function mainMenu() {
-	const { main } = await inquirer.prompt(await scaffoldMainMenuQuestions());
+	const choice = await inquirer.prompt(await scaffoldMainMenuQuestions(baseChoices));
 
-	if (main === "System Report") return systemReportMenu();
-	if (main === "Install") return installMenu();
-	if (main === "Uninstall") return uninstallMenu();
-	// if (main === "Quit") return main;
-	// return main !== "Quit" ? menu() : main;
-	// return main !== "Quit" ? mainMenu() : main;
-	return main === "Quit" ? main : mainMenu();
+	menuChoiceHandler(choice);
+}
+
+function menuChoiceHandler(choiceObject) {
+	const choice = Object.values(choiceObject)[0];
+
+	if (choice === "Main Menu") return mainMenu();
+	if (choice === "Install") return installMenu();
+	if (choice === "Uninstall") return uninstallMenu();
+	if (choice === "System Report") return systemReportMenu();
+	if (choice === "Quit") return choice;
 }
 
 module.exports = {

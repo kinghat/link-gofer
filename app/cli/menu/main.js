@@ -1,8 +1,6 @@
 const { STATE } = require("../../lib/app-variables").APP;
 
-const baseChoices = ["System Report", "Quit"];
-
-async function scaffoldMainMenuQuestions() {
+async function scaffoldMainMenuQuestions(baseChoices) {
 	const state = await STATE();
 	const dynamicChoices = [state ? "Uninstall" : "Install"];
 	const choices = [...dynamicChoices, ...baseChoices];

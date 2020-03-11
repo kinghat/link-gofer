@@ -14,7 +14,7 @@ if (process.stdin.isTTY) {
 	program.version(pkg.version);
 	program.parse(process.argv);
 
-	console.log(`Welcome to Link Gofer:`);
+	console.log(`Welcome to Link Gofer`);
 
 	rootMenu();
 	// rootMenu().catch((error) => console.log(error));
