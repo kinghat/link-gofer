@@ -1,13 +1,12 @@
 const inquirer = require("inquirer");
 
-const { scaffoldMainMenuQuestions } = require("./main-menu");
+const { scaffoldMainMenuQuestions } = require("./main");
 const { scaffoldInstallMenuQuestions } = require("./install");
-const { uninstall } = require("./uninstall");
+const { scaffoldUninstallMenuQuestions } = require("./uninstall");
 const { scaffoldSystemReportMenuQuestions, printSystemReport } = require("./system-report");
 
 const baseChoices = ["System Report", "Quit"];
 async function rootMenu() {
-	// console.log(`LOG: baseChoices`, baseChoices);
 	mainMenu();
 }
 
@@ -18,7 +17,14 @@ async function systemReportMenu() {
 }
 
 async function installMenu() {
-	const { install } = await inquirer.prompt(await scaffoldInstallMenuQuestions());
+	const { install } = await inquirer.prompt(await scaffoldInstallMenuQuestions(baseChoices));
+
+	if (install === "Main Menu") return rootMenu();
+	if (install === "System Report") systemReportMenu();
+}
+
+async function uninstallMenu() {
+	const { install } = await inquirer.prompt(await scaffoldUninstallMenuQuestions());
 
 	if (install === "Main Menu") return rootMenu();
 	if (install === "System Report") systemReportMenu();
@@ -29,10 +35,11 @@ async function mainMenu() {
 
 	if (main === "System Report") return systemReportMenu();
 	if (main === "Install") return installMenu();
-	if (main === "Uninstall") uninstall();
+	if (main === "Uninstall") return uninstallMenu();
 	// if (main === "Quit") return main;
 	// return main !== "Quit" ? menu() : main;
-	return main !== "Quit" ? mainMenu() : main;
+	// return main !== "Quit" ? mainMenu() : main;
+	return main === "Quit" ? main : mainMenu();
 }
 
 module.exports = {

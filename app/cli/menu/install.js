@@ -1,7 +1,7 @@
 const { BROWSERS } = require("../../lib/app-variables").APP;
-const { baseChoices } = require("./root");
+// const { baseChoices } = require("./root");
 
-async function scaffoldInstallMenuQuestions() {
+async function scaffoldInstallMenuQuestions(baseChoices) {
 	const browsers = await BROWSERS();
 	const staticChoices = ["Main Menu", ...baseChoices];
 	// const staticChoices = ["Main Menu", "System Report", "Quit"];
