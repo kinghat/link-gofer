@@ -1,10 +1,18 @@
+const inquirer = require("inquirer");
+
 const { BROWSERS } = require("../../lib/app-variables").APP;
 
 async function scaffoldInstallMenuQuestions(baseChoices) {
+	const menuName = "Install";
 	const browsers = await BROWSERS();
 	const staticChoices = [...baseChoices];
 	const dynamicChoices = [...browsers];
-	const choices = [...dynamicChoices, ...staticChoices];
+	// const choices = [...dynamicChoices, ...staticChoices];
+	const choices = [
+		...browsers,
+		new inquirer.Separator(),
+		...baseChoices.filter((choice) => choice !== menuName),
+	];
 
 	const message = browsers.length
 		? `Which browser is the extension installed on?`

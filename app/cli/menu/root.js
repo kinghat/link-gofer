@@ -9,13 +9,30 @@ const baseChoices = ["System Report", "Main Menu", "Quit"];
 const menus = ["Install", "Uninstall", "System Report", "Main Menu", "Quit"];
 
 async function rootMenu() {
-	mainMenu();
+	menuHandler(scaffoldMainMenuQuestions, baseChoices);
+}
+
+async function menuHandler(menuQuestions, baseChoices) {
+	const choice = await inquirer.prompt(await menuQuestions(baseChoices));
+
+	menuChoiceHandler(choice);
+}
+
+function menuChoiceHandler(choiceObject) {
+	const choice = Object.values(choiceObject)[0];
+
+	if (choice === "Main Menu") return menuHandler(scaffoldMainMenuQuestions, baseChoices);
+	if (choice === "Install") return menuHandler(scaffoldInstallMenuQuestions, baseChoices);
+	if (choice === "Uninstall") return menuHandler(scaffoldUninstallMenuQuestions, baseChoices);
+	if (choice === "System Report")
+		return menuHandler(scaffoldSystemReportMenuQuestions, baseChoices);
+	if (choice === "Quit") return choice;
 }
 
 async function systemReportMenu() {
 	await printSystemReport();
 	const questions = await scaffoldSystemReportMenuQuestions(baseChoices);
-	console.log(`LOG: systemReportMenu -> questions: `, questions);
+	// console.log(`LOG: systemReportMenu -> questions: `, questions);
 	const choice = await inquirer.prompt(questions);
 	// const choice = await inquirer.prompt(await scaffoldSystemReportMenuQuestions(baseChoices));
 
@@ -40,17 +57,16 @@ async function mainMenu() {
 	menuChoiceHandler(choice);
 }
 
-function menuChoiceHandler(choiceObject) {
-	const choice = Object.values(choiceObject)[0];
+// function menuChoiceHandler(choiceObject) {
+// 	const choice = Object.values(choiceObject)[0];
 
-	if (choice === "Main Menu") return mainMenu();
-	if (choice === "Install") return installMenu();
-	if (choice === "Uninstall") return uninstallMenu();
-	if (choice === "System Report") return systemReportMenu();
-	if (choice === "Quit") return choice;
-}
+// 	if (choice === "Main Menu") return mainMenu();
+// 	if (choice === "Install") return installMenu();
+// 	if (choice === "Uninstall") return uninstallMenu();
+// 	if (choice === "System Report") return systemReportMenu();
+// 	if (choice === "Quit") return choice;
+// }
 
 module.exports = {
 	rootMenu,
-	baseChoices,
 };
