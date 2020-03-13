@@ -1,13 +1,11 @@
+const inquirer = require("inquirer");
+
 const { STATE, PLATFORM, MANIFEST_PATH, MANIFEST_SCOPE } = require("../../lib/app-variables").APP;
 
 async function scaffoldSystemReportMenuQuestions(baseChoices) {
 	const menuName = "System Report";
-	// baseChoices = [...new Set([...baseChoices, menuName])]
 	const choices = [...baseChoices.filter((choice) => choice !== menuName)];
-	// console.log(`LOG: scaffoldSystemReportMenuQuestions -> choices: `, choices);
-	// const choices = [...baseChoices];
-	// const message = "System Report";
-	const message = await printSystemReport();
+	const message = "Where would you like to go?";
 	const questions = [
 		{
 			type: "list",
@@ -17,8 +15,6 @@ async function scaffoldSystemReportMenuQuestions(baseChoices) {
 			default: "Main Menu",
 		},
 	];
-	// const report = await printSystemReport();
-	// console.log(report);
 	return questions;
 }
 
