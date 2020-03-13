@@ -1,5 +1,3 @@
-const inquirer = require("inquirer");
-
 const { STATE, PLATFORM, MANIFEST_PATH, MANIFEST_SCOPE } = require("../../lib/app-variables").APP;
 
 async function scaffoldSystemReportMenuQuestions(baseChoices) {
