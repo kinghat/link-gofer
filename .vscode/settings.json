@@ -1,0 +1,15 @@
+{
+	"files.exclude": {
+		"**/.DS_Store": true,
+		"**/.git": true,
+		"**/.hg": true,
+		"**/.svn": true,
+		"**/CVS": true,
+		"**/node_modules/**": true,
+		"build/cache": true,
+		"build/downloads": true,
+		"build/sstate-cache": true,
+		"build/tmp/**/*": true,
+		"builds": true
+	}
+}
