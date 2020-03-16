@@ -75,16 +75,18 @@ const BROWSER_DATA = [
 		},
 		linux: {
 			aliases: ["firefox", "firefox-beta", "firefox-developer"],
-			global: {
-				manifestPath: [
-					`/usr/lib/mozilla/native-messaging-hosts/${NAME}`,
-					`/usr/lib64/mozilla/native-messaging-hosts/${NAME}`,
-				],
-				hostPath: ``,
-			},
-			user: {
-				manifestPath: `${homedir}/.mozilla/native-messaging-hosts/${NAME}`,
-				hostPath: ``,
+			scope: {
+				global: {
+					manifestPath: [
+						`/usr/lib/mozilla/native-messaging-hosts/${NAME}`,
+						`/usr/lib64/mozilla/native-messaging-hosts/${NAME}`,
+					],
+					hostPath: ``,
+				},
+				user: {
+					manifestPath: `${homedir}/.mozilla/native-messaging-hosts/${NAME}`,
+					hostPath: ``,
+				},
 			},
 		},
 		darwin: {
