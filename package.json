@@ -30,9 +30,12 @@
 		"start-app": "yarn workspace link-gofer-app start",
 		"serve-extension": "yarn workspace link-gofer-extension serve",
 		"start-dev": "concurrently \"yarn serve-extension\" \"yarn start-app\"",
-		"package-app": "rm -rf builds/binaries && pkg app/package.json --out-path builds/binaries",
-		"package-app:dev": "rm -rf builds/binaries/dev && pkg app/package.json --out-path builds/binaries/dev",
-		"post-package-app": "cp node_modules/opn/xdg-open builds/binaries"
+		"build-app:all": "yarn build-app:linux && yarn build-app:macos && yarn build-app:win",
+		"build-app:linux": "rm -rf builds/binaries/linux && pkg app/package.json --target node12-linux-x64 --output builds/binaries/linux/link-gofer",
+		"build-app:macos": "rm -rf builds/binaries/macos && pkg app/package.json --target node12-macos-x64 --output builds/binaries/macos/link-gofer",
+		"build-app:win": "rm -rf builds/binaries/windows && pkg app/package.json --target node12-win-x64 --output builds/binaries/windows/link-gofer",
+		"build-app:dev": "rm -rf builds/binaries/dev && pkg app/package.json --out-path builds/binaries/dev",
+		"post-build-app": "cp node_modules/opn/xdg-open builds/binaries"
 	},
 	"devDependencies": {
 		"concurrently": "^5.1.0",
