@@ -104,6 +104,26 @@ const isInstalled = async (MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE) => {
 	return manifestLocation ? isManifestFile(manifestLocation) : false;
 };
 
+async function scaffoldManifestFile(BROWSER_DATA, MANIFEST_OBJECT, PLATFORM, browserName) {
+	// if (PLATFORM === "win32") {
+	// 	console.log("win32 not setup yet!");
+	// } else if (PLATFORM === "linux") {
+	// 	const allowed = BROWSERS_DATA.MANIFEST_OBJECT;
+	// }
+	const manifestProperties = BROWSER_DATA.some((browserItem) =>
+		browserItem.browser === browserName
+			? {
+					path: browserItem[PLATFORM].scope.user.manifestPath,
+					manifestAllowed: browserItem.allowed,
+			  }
+			: {},
+	);
+	// console.log(`LOG: scaffoldManifestFile -> manifestProperties`, manifestProperties);
+
+	MANIFEST_OBJECT = { ...MANIFEST_OBJECT, ...manifestProperties };
+	return MANIFEST_OBJECT;
+}
+
 module.exports = {
 	getManifestPath,
 	getManifestScope,
@@ -111,4 +131,5 @@ module.exports = {
 	isManifestFile,
 	isGlobalScope,
 	isInstalled,
+	scaffoldManifestFile,
 };

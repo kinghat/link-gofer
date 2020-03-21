@@ -1,11 +1,9 @@
 const { homedir } = require("os");
 
 const pkg = require("../package.json");
-
-const NAME = pkg.name.replace(/-/g, ".");
-
+const NAME = "link.gofer";
+// const NAME = pkg.name.replace(/-/g, ".");
 const DESCRIPTION = pkg.description;
-
 const MANIFEST_PATHS = {
 	darwin: {
 		global: {
@@ -38,22 +36,22 @@ const MANIFEST_PATHS = {
 		},
 	},
 };
-
 const REGISTRY_SCOPES = {
 	hives: { global: "HKLM", user: "HKCU" },
 	paths: { global: "\\SOFTWARE", user: "\\Software" },
 };
-
 const MANIFEST_OBJECT = {
 	name: NAME,
 	description: DESCRIPTION,
 	path: "",
 	type: "stdio",
 };
-
 const BROWSER_DATA = [
 	{
 		browser: "firefox",
+		allowed: {
+			allowed_extensions: ["@link-gofer-app"],
+		},
 		win32: {
 			aliases: ["Mozilla Firefox", "Firefox Developer Edition"],
 			scope: {
@@ -61,14 +59,14 @@ const BROWSER_DATA = [
 					hive: REGISTRY_SCOPES.hives.global,
 					basePath: `${REGISTRY_SCOPES.paths.global}\\Mozilla`,
 					keyPath: `\\NativeMessagingHosts\\${NAME}`,
-					manifestPath: `C:\\global\\path\\to\\firefox\\${NAME}`,
+					manifestPath: `C:\\global\\path\\to\\firefox\\${NAME}.json`,
 					hostPath: ``,
 				},
 				user: {
 					hive: REGISTRY_SCOPES.hives.user,
 					basePath: `${REGISTRY_SCOPES.paths.user}\\Mozilla`,
 					keyPath: `\\NativeMessagingHosts\\${NAME}`,
-					manifestPath: `C:\\user\\path\\to\\firefox\\${NAME}`,
+					manifestPath: `C:\\user\\path\\to\\firefox\\${NAME}.json`,
 					hostPath: ``,
 				},
 			},
@@ -78,13 +76,13 @@ const BROWSER_DATA = [
 			scope: {
 				global: {
 					manifestPath: [
-						`/usr/lib/mozilla/native-messaging-hosts/${NAME}`,
-						`/usr/lib64/mozilla/native-messaging-hosts/${NAME}`,
+						`/usr/lib/mozilla/native-messaging-hosts/${NAME}.json`,
+						`/usr/lib64/mozilla/native-messaging-hosts/${NAME}.json`,
 					],
 					hostPath: ``,
 				},
 				user: {
-					manifestPath: `${homedir}/.mozilla/native-messaging-hosts/${NAME}`,
+					manifestPath: `${homedir}/.mozilla/native-messaging-hosts/${NAME}.json`,
 					hostPath: ``,
 				},
 			},
@@ -93,11 +91,11 @@ const BROWSER_DATA = [
 			aliases: [],
 			scope: {
 				global: {
-					manifestPath: `/Library/Application Support/Mozilla/NativeMessagingHosts/${NAME}`,
+					manifestPath: `/Library/Application Support/Mozilla/NativeMessagingHosts/${NAME}.json`,
 					hostPath: ``,
 				},
 				user: {
-					manifestPath: `${homedir}/Library/Application Support/Mozilla/NativeMessagingHosts/${NAME}`,
+					manifestPath: `${homedir}/Library/Application Support/Mozilla/NativeMessagingHosts/${NAME}.json`,
 					hostPath: ``,
 				},
 			},
@@ -105,6 +103,9 @@ const BROWSER_DATA = [
 	},
 	{
 		browser: "chrome",
+		allowed: {
+			allowed_origins: ["chrome-extension://ffafcnflglpadgjpkagjihmpemgbpdin/"],
+		},
 		win32: {
 			aliases: ["Chrome", "Chrome Beta", "Chrome Canary", "Brave", "Opera", "Vivaldi"],
 			scope: {
@@ -112,14 +113,14 @@ const BROWSER_DATA = [
 					hive: REGISTRY_SCOPES.hives.global,
 					basePath: `${REGISTRY_SCOPES.paths.global}\\Google`,
 					keyPath: `\\Chrome\\NativeMessagingHosts\\${NAME}`,
-					manifestPath: `C:\\global\\path\\to\\chrome\\${NAME}`,
+					manifestPath: `C:\\global\\path\\to\\chrome\\${NAME}.json`,
 					hostPath: ``,
 				},
 				user: {
 					hive: REGISTRY_SCOPES.hives.user,
 					basePath: `${REGISTRY_SCOPES.paths.user}\\Google`,
 					keyPath: `\\Chrome\\NativeMessagingHosts\\${NAME}`,
-					manifestPath: `C:\\user\\path\\to\\chrome\\${NAME}`,
+					manifestPath: `C:\\user\\path\\to\\chrome\\${NAME}.json`,
 					hostPath: ``,
 				},
 			},
@@ -134,11 +135,11 @@ const BROWSER_DATA = [
 			],
 			scope: {
 				global: {
-					manifestPath: `/etc/opt/chrome/native-messaging-hosts/${NAME}`,
+					manifestPath: `/etc/opt/chrome/native-messaging-hosts/${NAME}.json`,
 					hostPath: ``,
 				},
 				user: {
-					manifestPath: `${homedir}/.config/google-chrome/NativeMessagingHosts/${NAME}`,
+					manifestPath: `${homedir}/.config/google-chrome/NativeMessagingHosts/${NAME}.json`,
 					hostPath: ``,
 				},
 			},
@@ -147,11 +148,11 @@ const BROWSER_DATA = [
 			aliases: [],
 			scope: {
 				global: {
-					manifestPath: `/Library/Google/Chrome/NativeMessagingHosts/${NAME}`,
+					manifestPath: `/Library/Google/Chrome/NativeMessagingHosts/${NAME}.json`,
 					hostPath: ``,
 				},
 				user: {
-					manifestPath: `${homedir}/Library/Application Support/Google/Chrome/NativeMessagingHosts/${NAME}`,
+					manifestPath: `${homedir}/Library/Application Support/Google/Chrome/NativeMessagingHosts/${NAME}.json`,
 					hostPath: ``,
 				},
 			},
