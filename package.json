@@ -31,22 +31,22 @@
 		"serve-extension": "yarn workspace link-gofer-extension serve",
 		"start-dev": "concurrently \"yarn serve-extension\" \"yarn start-app\"",
 		"build-app:all": "yarn build-app:linux && yarn build-app:macos && yarn build-app:win",
-		"build-app:linux": "rm -rf builds/binaries/linux && pkg app/package.json --target node12-linux-x64 --output builds/binaries/linux/link-gofer",
-		"build-app:macos": "rm -rf builds/binaries/macos && pkg app/package.json --target node12-macos-x64 --output builds/binaries/macos/link-gofer",
-		"build-app:win": "rm -rf builds/binaries/windows && pkg app/package.json --target node12-win-x64 --output builds/binaries/windows/link-gofer",
+		"build-app:linux": "rm -rf builds/binaries/linux && pkg app/package.json --target node12-linux-x64 --output builds/binaries/linux/link-gofer-app",
+		"build-app:macos": "rm -rf builds/binaries/macos && pkg app/package.json --target node12-macos-x64 --output builds/binaries/macos/link-gofer-app",
+		"build-app:win": "rm -rf builds/binaries/windows && pkg app/package.json --target node12-win-x64 --output builds/binaries/windows/link-gofer-app",
 		"build-app:dev": "rm -rf builds/binaries/dev && pkg app/package.json --out-path builds/binaries/dev",
 		"post-build-app": "cp node_modules/opn/xdg-open builds/binaries"
 	},
 	"devDependencies": {
 		"concurrently": "^5.1.0",
 		"eslint": "^6.8.0",
-		"eslint-config-prettier": "^6.10.0",
+		"eslint-config-prettier": "^6.10.1",
 		"eslint-config-standard": "^14.1.1",
 		"eslint-plugin-import": "^2.20.1",
 		"eslint-plugin-node": "^11.0.0",
 		"eslint-plugin-prettier": "^3.1.2",
 		"eslint-plugin-promise": "^4.2.1",
 		"eslint-plugin-standard": "^4.0.1",
-		"prettier": "^1.19.1"
+		"prettier": "^2.0.1"
 	}
 }
