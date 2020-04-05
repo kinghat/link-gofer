@@ -1,5 +1,6 @@
 const {
-	NAME,
+	MANIFEST_NAME,
+	HOST_NAME,
 	MANIFEST_PATHS,
 	WINDOWS_REGISTRY_KEYS,
 	MANIFEST_OBJECT,
@@ -10,7 +11,7 @@ const {
 	getManifestScope,
 	getBrowsers,
 	isInstalled,
-	scaffoldManifestFile,
+	// scaffoldManifestFile,
 } = require("./utilities");
 
 const STATE = async () => isInstalled(MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE);
@@ -21,7 +22,8 @@ const MANIFEST_PATH = async () =>
 	getManifestPath(APP.MANIFEST_PATHS, APP.PLATFORM, APP.MANIFEST_SCOPE);
 // const MANIFEST_FILE = scaffoldManifestFile(BROWSER_DATA, MANIFEST_OBJECT, PLATFORM, browserName);
 const APP = {
-	NAME,
+	MANIFEST_NAME,
+	HOST_NAME,
 	STATE,
 	PLATFORM,
 	BROWSERS,

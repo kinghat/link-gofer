@@ -40,11 +40,10 @@ async function getBrowsers(PLATFORM, BROWSERS_DATA) {
 			await Promise.all(
 				BROWSERS_DATA.flatMap((browser) => browser.linux.aliases).map(async (browser) => {
 					const { stdout } = await exec(`command -v ${browser}`).catch((error) => {
-						if (error.code === 127) return {};
+						if ([127, 1].includes(error.code)) return {};
 
 						throw error;
 					});
-
 					if (stdout) return browser;
 				}),
 			)
@@ -104,25 +103,35 @@ const isInstalled = async (MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE) => {
 	return manifestLocation ? isManifestFile(manifestLocation) : false;
 };
 
-async function scaffoldManifestFile(BROWSER_DATA, MANIFEST_OBJECT, PLATFORM, browserName) {
-	// if (PLATFORM === "win32") {
-	// 	console.log("win32 not setup yet!");
-	// } else if (PLATFORM === "linux") {
-	// 	const allowed = BROWSERS_DATA.MANIFEST_OBJECT;
-	// }
-	const manifestProperties = BROWSER_DATA.some((browserItem) =>
-		browserItem.browser === browserName
-			? {
-					path: browserItem[PLATFORM].scope.user.manifestPath,
-					manifestAllowed: browserItem.allowed,
-			  }
-			: {},
-	);
-	// console.log(`LOG: scaffoldManifestFile -> manifestProperties`, manifestProperties);
-
-	MANIFEST_OBJECT = { ...MANIFEST_OBJECT, ...manifestProperties };
-	return MANIFEST_OBJECT;
+async function exists(path) {
+	// if (error.code === "ENOENT") return;
+	// if (error.code === "ENOENT" || error.code === "ERR_INVALID_ARG_TYPE") return false;
+	// throw error;
+	// return Boolean(
+	// 	await stat(path).catch((error) => (error.code === "ENOENT" ? false : Error(error))),
+	// );
+	return stat(path).catch((error) => (error.code === "ENOENT" ? false : Error(error)));
 }
+
+// async function scaffoldManifestFile(BROWSER_DATA, MANIFEST_OBJECT, PLATFORM, browserName) {
+// 	// if (PLATFORM === "win32") {
+// 	// 	console.log("win32 not setup yet!");
+// 	// } else if (PLATFORM === "linux") {
+// 	// 	const allowed = BROWSERS_DATA.MANIFEST_OBJECT;
+// 	// }
+// 	const manifestProperties = BROWSER_DATA.some((browserItem) =>
+// 		browserItem.browser === browserName
+// 			? {
+// 					path: browserItem[PLATFORM].scope.user.manifestPath,
+// 					manifestAllowed: browserItem.allowed,
+// 			  }
+// 			: {},
+// 	);
+// 	// console.log(`LOG: scaffoldManifestFile -> manifestProperties`, manifestProperties);
+
+// 	MANIFEST_OBJECT = { ...MANIFEST_OBJECT, ...manifestProperties };
+// 	return MANIFEST_OBJECT;
+// }
 
 module.exports = {
 	getManifestPath,
@@ -131,5 +140,6 @@ module.exports = {
 	isManifestFile,
 	isGlobalScope,
 	isInstalled,
-	scaffoldManifestFile,
+	exists,
+	// scaffoldManifestFile,
 };

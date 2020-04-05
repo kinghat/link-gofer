@@ -1,7 +1,8 @@
 import browser from "webextension-polyfill";
-
+import { MANIFEST_NAME } from "../../app/lib/CONSTANTS";
+console.log(`LOG: MANIFEST_NAME`, MANIFEST_NAME);
 // const port = browser.runtime.connectNative("link.gofer");
-const port = browser.runtime.connectNative("link.gofer");
+const port = browser.runtime.connectNative(MANIFEST_NAME);
 
 port.onMessage.addListener((response) => {
 	if (response.type === "success") {

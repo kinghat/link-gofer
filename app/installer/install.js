@@ -1,30 +1,53 @@
-const { writeFile, mkdir, stat } = require("fs").promises;
-const { parse } = require("path");
+const { writeFile, mkdir, copyFile, unlink } = require("fs").promises;
+const { dirname, basename, parse, resolve, join } = require("path");
 
 const { BROWSERS, PLATFORM } = require("../lib/app-variables").APP;
-const { BROWSER_DATA, MANIFEST_OBJECT } = require("../lib/CONSTANTS");
+const { exists } = require("../lib/utilities");
+const { BROWSER_DATA, MANIFEST_OBJECT, PROJECT_NAME, HOST_NAME } = require("../lib/CONSTANTS");
 // const { scaffoldManifestFile } = require("../lib/utilities");
 
-function scaffoldManifestFile(MANIFEST_OBJECT, manifestProperties) {
-	return JSON.stringify({ ...MANIFEST_OBJECT, ...manifestProperties }, null, 2);
+function scaffoldManifestFile(MANIFEST_OBJECT, path, allowed) {
+	// const { hostPath: path, allowed } = manifestProperties;
+	return JSON.stringify({ ...MANIFEST_OBJECT, path, ...allowed }, null, 2);
 }
 
-// async function writeFile(path, data) {
-// 	await writeFile(path, data).catch((error) => console.log(error));
-// }
+async function writeManifestFile(manifestPath, manifestFileData) {
+	const manifestDirectoryPath = dirname(manifestPath);
+	const isManifestDirectory = await exists(manifestDirectoryPath);
 
-async function writeDir(path) {
-	console.log(`LOG: writeDir -> status`, status);
+	if (isManifestDirectory) {
+		await writeFile(manifestPath, manifestFileData).catch((error) => console.log(error));
+	} else {
+		await mkdir(manifestDirectoryPath).catch((error) => console.log(error));
+		await writeFile(manifestPath, manifestFileData).catch((error) => console.log(error));
+	}
 }
 
-async function exists(path) {
-	// if (error.code === "ENOENT") return;
-	// if (error.code === "ENOENT" || error.code === "ERR_INVALID_ARG_TYPE") return false;
-	// throw error;
-	// return Boolean(
-	// 	await stat(path).catch((error) => (error.code === "ENOENT" ? false : Error(error))),
-	// );
-	return stat(path).catch((error) => (error.code === "ENOENT" ? false : Error(error)));
+async function writeHostApp(hostPath, PROJECT_NAME, HOST_NAME) {
+	const hostAppDirectory = join(PROJECT_NAME, HOST_NAME);
+	// console.log(`LOG: writeHostApp -> hostAppDirectoryS`, hostAppDirectoryS);
+	// const { dir: hostAppPath, base: hostAppFilename } = parse(hostPath);
+	// const isHostAppDirectory = await exists(hostAppDirectoryPath);
+	const isLocalPath = (await exists(hostPath)) && (await exists(join(hostPath, PROJECT_NAME)));
+	// console.log(`LOG: writeHostApp -> isHostAppDirectory`, isLocalPath);
+	const binaryPath = resolve(HOST_NAME);
+	// console.log(`LOG: writeHostApp -> binaryPath`, binaryPath);
+
+	if (isLocalPath) {
+		// await writeFile(hostPath, "test").catch((error) => console.log(error));
+		await copyFile(binaryPath, join(hostPath, PROJECT_NAME, HOST_NAME)).catch((error) =>
+			console.log(error),
+		);
+	} else {
+		await mkdir(join(hostPath, PROJECT_NAME)).catch((error) => console.log(error));
+		await copyFile(binaryPath, join(hostPath, PROJECT_NAME, HOST_NAME)).catch((error) =>
+			console.log(error),
+		);
+	}
+
+	unlink(binaryPath);
+
+	return exists(join(hostPath, PROJECT_NAME, HOST_NAME));
 }
 
 async function install(browser, PLATFORM) {
@@ -34,34 +57,17 @@ async function install(browser, PLATFORM) {
 				// browser: browserItem.browser,
 				manifestPath: browserItem[PLATFORM].scope.user.manifestPath,
 				hostPath: browserItem[PLATFORM].scope.user.hostPath,
-				...browserItem.allowed,
+				allowed: browserItem.allowed,
 			};
 		}
 	}).filter(Boolean);
 
-	const MANIFEST_FILE = scaffoldManifestFile(MANIFEST_OBJECT, browserData[0]);
-	// console.log(`LOG: install -> MANIFEST_FILE`, MANIFEST_FILE);
-	const { manifestPath, hostPath } = browserData[0];
-	const { dir: manifestDirectoryPath, base: manifestFileName } = parse(manifestPath);
-	const { dir: hostAppDirectoryPath, base: hostAppFileName } = parse(hostPath);
-	const isManifestDirectory = await exists(manifestDirectoryPath);
+	const { manifestPath, hostPath, allowed } = browserData[0];
+	const hostAppPath = join(hostPath, PROJECT_NAME, HOST_NAME);
+	const manifestData = scaffoldManifestFile(MANIFEST_OBJECT, hostAppPath, allowed);
 
-	// const isManifestDirectory = await exists(manifestDirectoryPath).catch((error) => {
-	// 	if (error.code === "ENOENT") return false;
-	// 	// if (error.code === "ENOENT" || error.code === "ERR_INVALID_ARG_TYPE") return false;
-	// 	throw error;
-	// });
-
-	if (isManifestDirectory) {
-		await writeFile(manifestPath, MANIFEST_FILE).catch((error) => console.log(error));
-	} else {
-		await mkdir(manifestDirectoryPath);
-		await writeFile(manifestPath, MANIFEST_FILE).catch((error) => console.log(error));
-	}
-
-	// writeDir("/etc");
-	// writeDir(browserData[0].path);
-	// await writeManifest(browserData[0].path, MANIFEST_FILE);
+	await writeHostApp(hostPath, PROJECT_NAME, HOST_NAME);
+	await writeManifestFile(manifestPath, manifestData);
 }
 
 async function installer(params) {}
