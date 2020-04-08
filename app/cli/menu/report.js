@@ -19,10 +19,12 @@ async function scaffoldSystemReportMenuQuestions(baseChoices) {
 async function printSystemReport() {
 	const state = await STATE();
 
-	console.log(`System Report: \nplatform: ${PLATFORM} \ninstalled: ${state} \nmanifest path: ${
-		state ? await MANIFEST_PATH() : "Not Found"
-	} \nmanifest scope: ${await MANIFEST_SCOPE()}
+	console.log(`System Report: \nplatform: ${PLATFORM} \ninstalled: ${state}
 	`);
+	// console.log(`System Report: \nplatform: ${PLATFORM} \ninstalled: ${state} \nmanifest path: ${
+	// 	state ? await MANIFEST_PATH() : "Not Found"
+	// } \nmanifest scope: ${await MANIFEST_SCOPE()}
+	// `);
 }
 
 module.exports = {

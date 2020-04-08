@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 
-const { BROWSERS, PLATFORM } = require("../../lib/app-variables").APP;
+// const { BROWSERS, PLATFORM } = require("../../lib/app-variables").APP;
 const { install } = require("../../installer/install");
 const { scaffoldMainMenuQuestions } = require("./main");
 const { scaffoldInstallMenuQuestions } = require("./install");
@@ -26,7 +26,7 @@ async function menuHandler(menuQuestions, baseChoices) {
 async function menuChoiceHandler(choiceObject) {
 	const choice = Object.values(choiceObject)[0];
 
-	if (!mainChoices.includes(choice)) return install(choice, PLATFORM);
+	if (!mainChoices.includes(choice)) return install(choice);
 	if (choice === "Main Menu") return menuHandler(scaffoldMainMenuQuestions, baseChoices);
 	if (choice === "Install") return menuHandler(scaffoldInstallMenuQuestions, baseChoices);
 	if (choice === "Uninstall") return menuHandler(scaffoldUninstallMenuQuestions, baseChoices);

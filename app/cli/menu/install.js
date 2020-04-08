@@ -1,10 +1,13 @@
 const inquirer = require("inquirer");
 
-const { BROWSERS } = require("../../lib/app-variables").APP;
+const { BROWSERS, Browser } = require("../../lib/app-variables").APP;
+const { getBrowsers } = require("../../lib/utilities");
+const { BROWSER_DATA } = require("../../lib/CONSTANTS");
 
 async function scaffoldInstallMenuQuestions(baseChoices) {
 	const menuName = "Install";
-	const browsers = await BROWSERS();
+	const browsers = await getBrowsers(BROWSER_DATA);
+	console.log(`LOG: scaffoldInstallMenuQuestions -> browsers: `, browsers);
 	const choices = [
 		...browsers,
 		new inquirer.Separator(),

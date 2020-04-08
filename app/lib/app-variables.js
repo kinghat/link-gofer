@@ -1,29 +1,42 @@
 const {
 	MANIFEST_NAME,
-	HOST_NAME,
+	APP_NAME,
 	MANIFEST_PATHS,
 	WINDOWS_REGISTRY_KEYS,
 	MANIFEST_OBJECT,
 	BROWSER_DATA,
+	metaData,
 } = require("./CONSTANTS");
 const {
 	getManifestPath,
 	getManifestScope,
 	getBrowsers,
-	isInstalled,
+	isAppInstalled,
+	isManifestInstalled,
 	// scaffoldManifestFile,
 } = require("./utilities");
 
-const STATE = async () => isInstalled(MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE);
+async function STATE() {
+	const manifestState = await isManifestInstalled();
+	const appState = await isAppInstalled();
+	// if (appState.length && manifestState.length) return `Installed`;
+	// if (manifestState.length) return `Partially: The application is missing.`;
+	// if (appState.length) return `Partially: The Manifest is missing.`;
+	return Boolean(appState.length && manifestState.length);
+}
 const PLATFORM = process.platform;
-const BROWSERS = async () => getBrowsers(PLATFORM, BROWSER_DATA);
+async function BROWSERS() {
+	return getBrowsers(BROWSER_DATA);
+}
+// const BROWSERS = async () => getBrowsers();
 const MANIFEST_SCOPE = async () => getManifestScope(MANIFEST_PATHS, PLATFORM);
 const MANIFEST_PATH = async () =>
 	getManifestPath(APP.MANIFEST_PATHS, APP.PLATFORM, APP.MANIFEST_SCOPE);
 // const MANIFEST_FILE = scaffoldManifestFile(BROWSER_DATA, MANIFEST_OBJECT, PLATFORM, browserName);
 const APP = {
+	metaData,
 	MANIFEST_NAME,
-	HOST_NAME,
+	APP_NAME,
 	STATE,
 	PLATFORM,
 	BROWSERS,

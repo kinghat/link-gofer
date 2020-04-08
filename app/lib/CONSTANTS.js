@@ -3,10 +3,17 @@ const { homedir } = require("os");
 const projectPkg = require("../../package.json");
 const appPkg = require("../package.json");
 
-const MANIFEST_NAME = appPkg.name.replace(/-/g, ".");
-const PROJECT_NAME = projectPkg.name;
-const HOST_NAME = appPkg.name;
-const DESCRIPTION = appPkg.description;
+const metaData = {
+	MANIFEST_NAME: appPkg.name.replace(/-/g, "."),
+	PROJECT_NAME: projectPkg.name,
+	APP_NAME: appPkg.name,
+	DESCRIPTION: appPkg.description,
+};
+const { MANIFEST_NAME, PROJECT_NAME, APP_NAME, DESCRIPTION } = metaData;
+// const MANIFEST_NAME = appPkg.name.replace(/-/g, ".");
+// const PROJECT_NAME = projectPkg.name;
+// const APP_NAME = appPkg.name;
+// const DESCRIPTION = appPkg.description;
 const MANIFEST_PATHS = {
 	darwin: {
 		global: {
@@ -64,14 +71,14 @@ const BROWSER_DATA = [
 					basePath: `${REGISTRY_SCOPES.paths.global}\\Mozilla`,
 					keyPath: `\\NativeMessagingHosts\\${MANIFEST_NAME}`,
 					manifestPath: `C:\\global\\path\\to\\firefox\\${MANIFEST_NAME}.json`,
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 				user: {
 					hive: REGISTRY_SCOPES.hives.user,
 					basePath: `${REGISTRY_SCOPES.paths.user}\\Mozilla`,
 					keyPath: `\\NativeMessagingHosts\\${MANIFEST_NAME}`,
 					manifestPath: `C:\\user\\path\\to\\firefox\\${MANIFEST_NAME}.json`,
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 			},
 		},
@@ -84,7 +91,7 @@ const BROWSER_DATA = [
 						`/usr/lib64/mozilla/native-messaging-hosts/${MANIFEST_NAME}.json`,
 					],
 					binaryExtension: "",
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 				user: {
 					manifestPath: `${homedir}/.mozilla/native-messaging-hosts/${MANIFEST_NAME}.json`,
@@ -98,11 +105,11 @@ const BROWSER_DATA = [
 			scope: {
 				global: {
 					manifestPath: `/Library/Application Support/Mozilla/NativeMessagingHosts/${MANIFEST_NAME}.json`,
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 				user: {
 					manifestPath: `${homedir}/Library/Application Support/Mozilla/NativeMessagingHosts/${MANIFEST_NAME}.json`,
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 			},
 		},
@@ -121,14 +128,14 @@ const BROWSER_DATA = [
 					basePath: `${REGISTRY_SCOPES.paths.global}\\Google`,
 					keyPath: `\\Chrome\\NativeMessagingHosts\\${MANIFEST_NAME}`,
 					manifestPath: `C:\\global\\path\\to\\chrome\\${MANIFEST_NAME}.json`,
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 				user: {
 					hive: REGISTRY_SCOPES.hives.user,
 					basePath: `${REGISTRY_SCOPES.paths.user}\\Google`,
 					keyPath: `\\Chrome\\NativeMessagingHosts\\${MANIFEST_NAME}`,
 					manifestPath: `C:\\user\\path\\to\\chrome\\${MANIFEST_NAME}.json`,
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 			},
 		},
@@ -144,7 +151,7 @@ const BROWSER_DATA = [
 			scope: {
 				global: {
 					manifestPath: `/etc/opt/chrome/native-messaging-hosts/${MANIFEST_NAME}.json`,
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 				user: {
 					manifestPath: `${homedir}/.config/google-chrome/NativeMessagingHosts/${MANIFEST_NAME}.json`,
@@ -158,11 +165,11 @@ const BROWSER_DATA = [
 			scope: {
 				global: {
 					manifestPath: `/Library/Google/Chrome/NativeMessagingHosts/${MANIFEST_NAME}.json`,
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 				user: {
 					manifestPath: `${homedir}/Library/Application Support/Google/Chrome/NativeMessagingHosts/${MANIFEST_NAME}.json`,
-					hostPath: `${HOST_NAME}`,
+					hostPath: `${APP_NAME}`,
 				},
 			},
 		},
@@ -171,13 +178,16 @@ const BROWSER_DATA = [
 
 module.exports = {
 	MANIFEST_PATHS,
-	MANIFEST_NAME,
-	PROJECT_NAME,
-	HOST_NAME,
+	metaData,
 	// WINDOWS_REGISTRY_KEYS,
 	REGISTRY_SCOPES,
 	MANIFEST_OBJECT,
 	BROWSER_DATA,
+	// refactor these to use the metaData object
+	MANIFEST_NAME,
+	PROJECT_NAME,
+	APP_NAME,
+	DESCRIPTION,
 };
 
 // const WINDOWS_REGISTRY_KEYS = {

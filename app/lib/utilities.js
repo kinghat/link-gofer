@@ -2,24 +2,36 @@
 const { stat } = require("fs").promises;
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
+const { join } = require("path");
 
 const { Registry } = require("winreg-utf8");
 
-const getManifestPath = async (MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE, browser = "chrome") => {
+const PLATFORM = process.platform;
+const {
+	MANIFEST_NAME,
+	MANIFEST_PATHS,
+	WINDOWS_REGISTRY_KEYS,
+	MANIFEST_OBJECT,
+	BROWSER_DATA,
+	metaData,
+} = require("./CONSTANTS");
+const { APP_NAME, PROJECT_NAME } = metaData;
+
+const getManifestPath = async (MANIFEST_PATHS, MANIFEST_SCOPE, browser = "chrome") => {
 	const scope = await MANIFEST_SCOPE();
 
 	return scope ? MANIFEST_PATHS[PLATFORM][scope][browser] : scope;
 };
 
-const getManifestScope = async (MANIFEST_PATHS, PLATFORM, browser = "chrome") => {
+const getManifestScope = async (MANIFEST_PATHS, browser = "chrome") => {
 	for (const scope in MANIFEST_PATHS[PLATFORM]) {
 		if (await isManifestFile(MANIFEST_PATHS[PLATFORM][scope][browser])) return scope;
 	}
 };
 
-async function getBrowsers(PLATFORM, BROWSERS_DATA) {
+async function getBrowsers(BROWSER_DATA) {
 	if (PLATFORM === "win32") {
-		const browsers = BROWSERS_DATA.flatMap((browser) =>
+		const browsers = BROWSER_DATA.flatMap((browser) =>
 			browser.win32.aliases.map((name) =>
 				browser.browser === "firefox"
 					? {
@@ -36,18 +48,31 @@ async function getBrowsers(PLATFORM, BROWSERS_DATA) {
 		);
 		return winBrowsers(browsers);
 	} else if (PLATFORM === "linux") {
-		return (
-			await Promise.all(
-				BROWSERS_DATA.flatMap((browser) => browser.linux.aliases).map(async (browser) => {
-					const { stdout } = await exec(`command -v ${browser}`).catch((error) => {
-						if ([127, 1].includes(error.code)) return {};
+		let browsers = await Promise.all(
+			BROWSER_DATA.flatMap((browser) => browser.linux.aliases).map(async (browser) => {
+				const { stdout } = await exec(`command -v ${browser}`).catch((error) => {
+					if ([127, 1].includes(error.code)) return {};
 
-						throw error;
-					});
-					if (stdout) return browser;
-				}),
-			)
-		).filter(Boolean);
+					throw error;
+				});
+				if (stdout) return browser;
+			}),
+		);
+		browsers = browsers.filter(Boolean);
+		console.log(`LOG: getBrowsers -> browsers: `, browsers);
+		return browsers;
+		// return (
+		// 	await Promise.all(
+		// 		BROWSER_DATA.flatMap((browser) => browser.linux.aliases).map(async (browser) => {
+		// 			const { stdout } = await exec(`command -v ${browser}`).catch((error) => {
+		// 				if ([127, 1].includes(error.code)) return {};
+
+		// 				throw error;
+		// 			});
+		// 			if (stdout) return browser;
+		// 		}),
+		// 	)
+		// ).filter(Boolean);
 	}
 }
 
@@ -97,11 +122,33 @@ const isGlobalScope = async (MANIFEST_SCOPE) => {
 	return scope === "global" ? true : scope === "user" ? false : scope;
 };
 
-const isInstalled = async (MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE) => {
-	const manifestLocation = await getManifestPath(MANIFEST_PATHS, PLATFORM, MANIFEST_SCOPE);
+async function isAppInstalled() {
+	let browsers = await Promise.all(
+		BROWSER_DATA.map(async (browserItem) => {
+			const appPath = browserItem[PLATFORM].scope.user.hostPath;
+			const isAppInstalled = await exists(join(appPath, PROJECT_NAME, APP_NAME));
 
-	return manifestLocation ? isManifestFile(manifestLocation) : false;
-};
+			if (isAppInstalled) return browserItem.browser;
+		}),
+	);
+	browsers = browsers.filter(Boolean);
+	console.log(`LOG: isAppInstalled -> browsers: `, browsers);
+	return browsers;
+}
+
+async function isManifestInstalled() {
+	let browsers = await Promise.all(
+		BROWSER_DATA.map(async (browserItem) => {
+			const manifestPath = browserItem[PLATFORM].scope.user.manifestPath;
+			const isManifestInstalled = await exists(manifestPath);
+
+			if (isManifestInstalled) return browserItem.browser;
+		}),
+	);
+	browsers = browsers.filter(Boolean);
+	console.log(`LOG: isManifestInstalled -> browsers: `, browsers);
+	return browsers;
+}
 
 async function exists(path) {
 	// if (error.code === "ENOENT") return;
@@ -113,7 +160,7 @@ async function exists(path) {
 	return stat(path).catch((error) => (error.code === "ENOENT" ? false : Error(error)));
 }
 
-// async function scaffoldManifestFile(BROWSER_DATA, MANIFEST_OBJECT, PLATFORM, browserName) {
+// async function scaffoldManifestFile(BROWSER_DATA, MANIFEST_OBJECT, browserName) {
 // 	// if (PLATFORM === "win32") {
 // 	// 	console.log("win32 not setup yet!");
 // 	// } else if (PLATFORM === "linux") {
@@ -139,7 +186,8 @@ module.exports = {
 	getBrowsers,
 	isManifestFile,
 	isGlobalScope,
-	isInstalled,
+	isAppInstalled,
+	isManifestInstalled,
 	exists,
 	// scaffoldManifestFile,
 };

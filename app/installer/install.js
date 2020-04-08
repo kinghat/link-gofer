@@ -3,8 +3,8 @@ const { dirname, basename, parse, resolve, join } = require("path");
 
 const { BROWSERS, PLATFORM } = require("../lib/app-variables").APP;
 const { exists } = require("../lib/utilities");
-const { BROWSER_DATA, MANIFEST_OBJECT, PROJECT_NAME, HOST_NAME } = require("../lib/CONSTANTS");
-// const { scaffoldManifestFile } = require("../lib/utilities");
+const { BROWSER_DATA, MANIFEST_OBJECT, metaData } = require("../lib/CONSTANTS");
+const { APP_NAME, PROJECT_NAME, MANIFEST_NAME, DESCRIPTION } = metaData;
 
 function scaffoldManifestFile(MANIFEST_OBJECT, path, allowed) {
 	// const { hostPath: path, allowed } = manifestProperties;
@@ -23,34 +23,33 @@ async function writeManifestFile(manifestPath, manifestFileData) {
 	}
 }
 
-async function writeHostApp(hostPath, PROJECT_NAME, HOST_NAME) {
-	const hostAppDirectory = join(PROJECT_NAME, HOST_NAME);
+async function writeHostApp(hostPath) {
+	const hostAppDirectory = join(PROJECT_NAME, APP_NAME);
 	// console.log(`LOG: writeHostApp -> hostAppDirectoryS`, hostAppDirectoryS);
 	// const { dir: hostAppPath, base: hostAppFilename } = parse(hostPath);
 	// const isHostAppDirectory = await exists(hostAppDirectoryPath);
 	const isLocalPath = (await exists(hostPath)) && (await exists(join(hostPath, PROJECT_NAME)));
 	// console.log(`LOG: writeHostApp -> isHostAppDirectory`, isLocalPath);
-	const binaryPath = resolve(HOST_NAME);
-	// console.log(`LOG: writeHostApp -> binaryPath`, binaryPath);
+	const installerPath = resolve(APP_NAME);
 
 	if (isLocalPath) {
 		// await writeFile(hostPath, "test").catch((error) => console.log(error));
-		await copyFile(binaryPath, join(hostPath, PROJECT_NAME, HOST_NAME)).catch((error) =>
+		await copyFile(installerPath, join(hostPath, PROJECT_NAME, APP_NAME)).catch((error) =>
 			console.log(error),
 		);
 	} else {
 		await mkdir(join(hostPath, PROJECT_NAME)).catch((error) => console.log(error));
-		await copyFile(binaryPath, join(hostPath, PROJECT_NAME, HOST_NAME)).catch((error) =>
+		await copyFile(installerPath, join(hostPath, PROJECT_NAME, APP_NAME)).catch((error) =>
 			console.log(error),
 		);
 	}
 
-	unlink(binaryPath);
+	unlink(installerPath);
 
-	return exists(join(hostPath, PROJECT_NAME, HOST_NAME));
+	return exists(join(hostPath, PROJECT_NAME, APP_NAME));
 }
 
-async function install(browser, PLATFORM) {
+async function install(browser) {
 	const browserData = BROWSER_DATA.map((browserItem) => {
 		if (browserItem[PLATFORM].aliases.some((browserName) => browserName === browser)) {
 			return {
@@ -63,10 +62,10 @@ async function install(browser, PLATFORM) {
 	}).filter(Boolean);
 
 	const { manifestPath, hostPath, allowed } = browserData[0];
-	const hostAppPath = join(hostPath, PROJECT_NAME, HOST_NAME);
+	const hostAppPath = join(hostPath, PROJECT_NAME, APP_NAME);
 	const manifestData = scaffoldManifestFile(MANIFEST_OBJECT, hostAppPath, allowed);
 
-	await writeHostApp(hostPath, PROJECT_NAME, HOST_NAME);
+	await writeHostApp(hostPath, metaData);
 	await writeManifestFile(manifestPath, manifestData);
 }
 
